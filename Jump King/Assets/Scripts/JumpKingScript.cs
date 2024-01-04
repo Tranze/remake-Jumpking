@@ -5,7 +5,7 @@ using System;
 public class JumpKingScript : MonoBehaviour, IDataPersistence
 {
     // Public variables for inspector access
-    public Rigidbody2D rb;    
+    public Rigidbody2D rb;
     public Animator anim;
     public SpriteRenderer sprite;
     public LayerMask groundMask;
@@ -17,7 +17,7 @@ public class JumpKingScript : MonoBehaviour, IDataPersistence
 
     private float timePlayed;
     // Variables for character movement
-    public float moveSpeed = 5f; // Character movement speed
+    public float moveSpeed = 7f; // Character movement speed
     public float moveInput; // Input for character movement
 
     // Variables for character state
@@ -37,75 +37,93 @@ public class JumpKingScript : MonoBehaviour, IDataPersistence
 
     private void onResume()
     {
-        startTime = Time.deltaTime ;
+        startTime = Time.deltaTime;
     }
 
     private void onPause()
     {
-        DataPersistenceManager.instance.SaveGame(); 
+        DataPersistenceManager.instance.SaveGame();
     }
 
     private void Update()
     {
-        
         timePlayed += Time.deltaTime;
-        moveInput = Input.GetAxis("Horizontal"); // Get horizontal input
+        moveInput = Input.GetAxis("Horizontal");
 
-        // Move the character horizontally if not jumping
-        if(jumpValue == 0.0f && isGrounded)
+        HandleHorizontalMovement();
+
+        // Check if the character is grounded
+        isGrounded = Physics2D.OverlapBox(new Vector2(transform.position.x, transform.position.y - 0.5f),
+            new Vector2(1.2f, 1.2f), 0f, groundMask);
+
+        // Check if the character is colliding with a wall
+        isCollidingWithWall = Physics2D.OverlapBox(new Vector2(transform.position.x + (moveInput >= 0 ? 0.6f : -0.6f), transform.position.y),
+            new Vector2(0.8f, 0.9f), 0f, wallMask);
+
+        HandleMaterialAndJumpInput();
+
+        UpdateAnimation();
+        Debug.Log(moveInput);
+    }
+
+    private void HandleHorizontalMovement()
+    {
+        if (jumpValue == 0.0f && isGrounded)
         {
             rb.velocity = new Vector2(moveInput * moveSpeed, rb.velocity.y);
         }
+    }
 
-        // Check if the character is grounded
-        isGrounded = Physics2D.OverlapBox(new Vector2(gameObject.transform.position.x, gameObject.transform.position.y - 0.5f),
-            new Vector2(0.8f, 1.5f), 0f, groundMask);
-
-        // Check if the character is colliding with a wall
-        isCollidingWithWall = Physics2D.OverlapBox(new Vector2(gameObject.transform.position.x + (moveInput >= 0 ? 0.4f : -0.4f), gameObject.transform.position.y),
-            new Vector2(0.225f, 0.9f), 0f, wallMask);
-
+    private void HandleMaterialAndJumpInput()
+    {
         // Apply bounce material if not grounded, normal material if grounded
-        if(!isGrounded)
+        if (!isGrounded)
         {
             rb.sharedMaterial = BounceMat;
+            canJump = false;
         }
         else
         {
             anim.SetBool("Collide", false);
             rb.sharedMaterial = NormalMat;
+            canJump = true;
         }
 
         // Handle jumping input
-        if(Input.GetKey(KeyCode.Space) && isGrounded && canJump)
+        if (Input.GetKey(KeyCode.Space) && isGrounded && canJump)
         {
             rb.velocity = new Vector2(0.0f, rb.velocity.y);
-            jumpValue += 0.3f; // Increment jump power
+            jumpValue += 0.5f;
         }
-        if(Input.GetKeyDown(KeyCode.Space) && isGrounded && canJump)
+
+        if (Input.GetKeyDown(KeyCode.Space) && isGrounded && canJump)
         {
-            jumpValue = 15f; // Set jump power directly
+            jumpValue = 15f;
             rb.velocity = new Vector2(0.0f, rb.velocity.y);
         }
 
         // Cap the jump power
-        if(jumpValue >= 40f && isGrounded)
+        if (jumpValue >= 40f && isGrounded)
         {
             jumpValue = 40f;
         }
 
         // Handle releasing the jump key
-        if(Input.GetKeyUp(KeyCode.Space))
+        if (Input.GetKeyUp(KeyCode.Space))
         {
-            if(isGrounded)
+            if (isGrounded)
             {
                 moveSpeed = 15f;
-                rb.velocity = new Vector2(moveInput * moveSpeed , jumpValue);
-                jumpValue = 0.0f;
+                rb.velocity = new Vector2(moveInput * moveSpeed, jumpValue);
             }
-            canJump = true;
+            jumpValue = 0f;
         }
-        UpdateAnimation(); // Update character animations
+
+        // Reset the movement speed
+        if (!canJump)
+        {
+            moveSpeed = 7f;
+        }
     }
 
     // Function to update character animations
@@ -116,14 +134,13 @@ public class JumpKingScript : MonoBehaviour, IDataPersistence
         anim.SetBool("Charging", false);
         anim.SetBool("Jumping", false);
         anim.SetBool("Falling", false);
-
         // Handle animation states based on input and character state
-        if (Input.GetKeyDown(KeyCode.Space) && isGrounded || Input.GetKey(KeyCode.Space) && isGrounded 
+        if (Input.GetKeyDown(KeyCode.Space) && isGrounded || Input.GetKey(KeyCode.Space) && isGrounded
             || Input.GetKeyDown(KeyCode.Space) && isGrounded && isCollidingWithWall || Input.GetKey(KeyCode.Space) && isGrounded && isCollidingWithWall)
         {
             anim.SetBool("Charging", true);
-        }             
-        else if (isCollidingWithWall)
+        }
+        else if (isCollidingWithWall && !isGrounded)
         {
             anim.SetBool("Collide", true);
         }
@@ -131,14 +148,15 @@ public class JumpKingScript : MonoBehaviour, IDataPersistence
         {
             anim.SetBool("Jumping", true);
         }
-        else if (rb.velocity.y < 0)
-        {            
+        else if (rb.velocity.y < -0.5)
+        {
             anim.SetBool("Falling", true);
         }
-        else if (moveInput != 0)
+        else if (moveInput > 0.0f || moveInput < 0.0f)
         {
+
             anim.SetBool("Running", true);
-            sprite.flipX = moveInput < 0; // Flip sprite when moving left
+            sprite.flipX = moveInput < 0.0f; // Flip sprite when moving left
         }
     }
 
@@ -152,10 +170,40 @@ public class JumpKingScript : MonoBehaviour, IDataPersistence
         this.transform.position = data.playerPosition;
     }
     public void SaveData(ref GameData data)
-    {   
+    {
         Debug.Log("saving player...");
         data.totalTimePlayed = timePlayed;
         data.playerPosition = this.transform.position;
+    }
+
+    private void OnDrawGizmos()
+    {
+        DrawOverlapBox();
+        DrawOverlapBox1();
+    }
+
+    private void OnDrawGizmosSelected()
+    {
+        DrawOverlapBox();
+        DrawOverlapBox1();
+    }
+
+    private void DrawOverlapBox()
+    {
+        Gizmos.color = Color.yellow;
+
+        // Calculate the box position and draw the box
+        Vector2 boxCenter = new Vector2(transform.position.x, transform.position.y - 0.5f);
+        Gizmos.DrawWireCube(boxCenter, new Vector3(1.2f, 1.2f, 0f));
+    }
+
+    private void DrawOverlapBox1()
+    {
+        Gizmos.color = Color.green;
+
+        // Calculate the box position and draw the box
+        Vector2 boxCenter = new Vector2(transform.position.x + (moveInput >= 0 ? 0.6f : -0.6f), transform.position.y);
+        Gizmos.DrawWireCube(boxCenter, new Vector3(0.8f, 0.9f, 0f));
     }
 
 }
