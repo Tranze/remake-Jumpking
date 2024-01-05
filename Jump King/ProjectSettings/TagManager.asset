@@ -53,6 +53,6 @@ TagManager:
   - name: forground
     uniqueID: 2677016117
     locked: 0
-  - name: New Layer 5
+  - name: player
     uniqueID: 1190966451
     locked: 0
