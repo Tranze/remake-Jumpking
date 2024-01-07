@@ -57,8 +57,8 @@ public class JumpKingScript : MonoBehaviour, IDataPersistence
             new Vector2(1.2f, 1.2f), 0f, groundMask);
 
         // Check if the character is colliding with a wall
-        isCollidingWithWall = Physics2D.OverlapBox(new Vector2(transform.position.x + (moveInput >= 0 ? 0.6f : -0.6f), transform.position.y),
-            new Vector2(0.8f, 0.9f), 0f, wallMask);
+        isCollidingWithWall = Physics2D.OverlapBox(new Vector2(transform.position.x, transform.position.y),
+      new Vector2(1.5f, 0.9f), 0f, wallMask);
 
         HandleMaterialAndJumpInput();
 
@@ -193,8 +193,8 @@ public class JumpKingScript : MonoBehaviour, IDataPersistence
         Gizmos.color = Color.yellow;
 
         // Calculate the box position and draw the box
-        Vector2 boxCenter = new Vector2(transform.position.x, transform.position.y - 0.5f);
-        Gizmos.DrawWireCube(boxCenter, new Vector3(1.2f, 1.2f, 0f));
+        Vector2 boxCenter = new Vector2(transform.position.x, transform.position.y);
+        Gizmos.DrawWireCube(boxCenter, new Vector3(1.5f, 0.9f, 0f));
     }
 
     private void DrawOverlapBox1()
