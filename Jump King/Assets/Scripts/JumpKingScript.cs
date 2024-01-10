@@ -63,7 +63,6 @@ public class JumpKingScript : MonoBehaviour, IDataPersistence
         HandleMaterialAndJumpInput();
 
         UpdateAnimation();
-        Debug.Log(moveInput);
     }
 
     private void HandleHorizontalMovement()

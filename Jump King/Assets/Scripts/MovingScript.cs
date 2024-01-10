@@ -2,7 +2,7 @@ using System.Diagnostics;
 using System.IO;
 using UnityEngine;
 using Debug = UnityEngine.Debug;
-public class Ravenscript : MonoBehaviour
+public class MovingScript : MonoBehaviour
 {
     private bool move = false;
     [SerializeField] private GameObject[] targets;

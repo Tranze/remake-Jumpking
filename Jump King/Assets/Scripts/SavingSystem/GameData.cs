@@ -6,13 +6,16 @@ using Debug = UnityEngine.Debug;
 [System.Serializable]
 public class GameData
 {
+    //Jumpkingscript's data
     public float totalTimePlayed;
     public Vector3 playerPosition;
     public Dictionary<string, bool> itemsCollected;
 
-    public int ID { get; set; }
+    //GameObjectsController data
+    public string currentPosition;
 
-    //public SerializableDictionary<string, bool> itemsCollected;
+    //SaveSlot ID
+    public int ID { get; set; }
 
     // the values defined in this constructor will be default values
     // the game starts with when there's no data to load
