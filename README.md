@@ -1,1 +1,1 @@
-Continue develop from Vu Minh Phuc'repository:https://github.com/vumphu/JumpKing
+Continue development from Vu Minh Phuc's repository: https://github.com/vumphu/JumpKing.
