@@ -6,6 +6,7 @@ using Debug = UnityEngine.Debug;
 [System.Serializable]
 public class GameData
 {
+    public bool isFinished;
     //Jumpkingscript's data
     public float totalTimePlayed;
     public Vector3 playerPosition;
@@ -21,8 +22,9 @@ public class GameData
     // the game starts with when there's no data to load
     public GameData()
     {
+        isFinished = false;
         totalTimePlayed = 0;
-        playerPosition = new Vector3(36.64f, 2.39f, -1.74f);
+        playerPosition = new Vector3(237.81f, 5.26f, -1.74f);
     }
     public float GetPosition()
     {
