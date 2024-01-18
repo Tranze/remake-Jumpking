@@ -15,6 +15,11 @@ public class GameData
     //GameObjectsController data
     public string currentPosition;
 
+    //raven's data
+    public Vector3 ravenPosition;
+    public bool isMoving;
+    public int targetIndex ;
+
     //SaveSlot ID
     public int ID { get; set; }
 
@@ -25,6 +30,7 @@ public class GameData
         isFinished = false;
         totalTimePlayed = 0;
         playerPosition = new Vector3(237.81f, 5.26f, -1.74f);
+
     }
     public float GetPosition()
     {
