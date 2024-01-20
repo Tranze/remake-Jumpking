@@ -54,7 +54,7 @@ public class JumpKingScript : MonoBehaviour, IDataPersistence
 
         // Check if the character is grounded
         isGrounded = Physics2D.OverlapBox(new Vector2(transform.position.x, transform.position.y - 0.5f),
-            new Vector2(1.2f, 1.2f), 0f, groundMask);
+            new Vector2(1.2f, 1.4f), 0f, groundMask);
 
         // Check if the character is colliding with a wall
         isCollidingWithWall = Physics2D.OverlapBox(new Vector2(transform.position.x, transform.position.y),
@@ -151,7 +151,7 @@ public class JumpKingScript : MonoBehaviour, IDataPersistence
         {
             anim.SetBool("Falling", true);
         }
-        else if (moveInput > 0.0f || moveInput < 0.0f)
+        else if (moveInput != 0.0f)
         {
 
             anim.SetBool("Running", true);
@@ -192,8 +192,8 @@ public class JumpKingScript : MonoBehaviour, IDataPersistence
         Gizmos.color = Color.yellow;
 
         // Calculate the box position and draw the box
-        Vector2 boxCenter = new Vector2(transform.position.x, transform.position.y);
-        Gizmos.DrawWireCube(boxCenter, new Vector3(1.5f, 0.9f, 0f));
+        Vector2 boxCenter = new Vector2(transform.position.x, transform.position.y - 0.5f);
+        Gizmos.DrawWireCube(boxCenter, new Vector3(1.2f, 1.4f, 0f));
     }
 
     private void DrawOverlapBox1()
@@ -201,8 +201,8 @@ public class JumpKingScript : MonoBehaviour, IDataPersistence
         Gizmos.color = Color.green;
 
         // Calculate the box position and draw the box
-        Vector2 boxCenter = new Vector2(transform.position.x + (moveInput >= 0 ? 0.6f : -0.6f), transform.position.y);
-        Gizmos.DrawWireCube(boxCenter, new Vector3(0.8f, 0.9f, 0f));
+        Vector2 boxCenter = new Vector2(transform.position.x, transform.position.y);
+        Gizmos.DrawWireCube(boxCenter, new Vector3(1.5f, 0.9f, 0f));
     }
 
 }

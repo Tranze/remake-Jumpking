@@ -19,8 +19,6 @@ public class TimelinePlayer : MonoBehaviour
     {
         //Find the controller script
         controllerScript = gameObjController.GetComponent<GameObjectsController>();
-
-        mCamera.GetComponent<CameraFollow>().enabled = false; // Disable CameraFollow script initially
         director = objectActiveDirector.GetComponent<PlayableDirector>(); // Assign the PlayableDirector component
         director.stopped += OnPlayableDirectorStopped;
 
@@ -52,6 +50,7 @@ public class TimelinePlayer : MonoBehaviour
 
     public void StartTimeline()
     {
+        mCamera.GetComponent<CameraFollow>().enabled = false; // Disable CameraFollow script initially
         director.Play(); // Play the Timeline associated with the PlayableDirector component
     }
 }
