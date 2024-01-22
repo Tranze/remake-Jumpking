@@ -30,7 +30,7 @@ public class GameData
         isFinished = false;
         totalTimePlayed = 0;
         playerPosition = new Vector3(224.5f, 4.5f, -1.8f);
-
+        // playerPosition = new Vector3(218.0f, 1025.5f, -1.8f);
     }
     public float GetPosition()
     {
