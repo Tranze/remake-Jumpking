@@ -33,9 +33,14 @@ public class SaveSlot : MonoBehaviour
         // there is data for this profileId
         else
         {
+            if(gameData.CheckIfFinished() == true )
+            {
+                totalTimePlayedText.text = "Game finished";
+                return;
+            }
             noDataContent.SetActive(false);
             hasDataContent.SetActive(true);
-            totalTimePlayedText.text = "Total time played:" + gameData.GetTimePlayed();
+            totalTimePlayedText.text = "Total time played: " + ((int)gameData.GetTimePlayed() / 60) + " min " + ((int)gameData.GetTimePlayed() % 60) + " sec";
         }
     }
 

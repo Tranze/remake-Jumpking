@@ -32,9 +32,9 @@ public class GameData
         playerPosition = new Vector3(224.5f, 4.5f, -1.8f);
         // playerPosition = new Vector3(218.0f, 1025.5f, -1.8f);
     }
-    public float GetPosition()
+    public bool CheckIfFinished()
     {
-        return playerPosition.x;
+        return isFinished;
     }
 
     public float GetTimePlayed()
