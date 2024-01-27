@@ -54,7 +54,7 @@ public class SaveSlotsMenu : Menu
     
     public void ActivateMenu(bool isLoadingGame)
     {
-        //set this menu to be active
+        // set this menu to be active
         this.gameObject.SetActive(true);
 
         // set mode

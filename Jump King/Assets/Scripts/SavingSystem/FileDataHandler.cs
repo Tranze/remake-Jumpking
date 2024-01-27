@@ -11,6 +11,7 @@ public class FileDataHandler
     private string dataDirPath = "";
     
     private string dataFileName = "";
+    
     public FileDataHandler(string dataDirPath, string dataFileName)
     {
         this.dataDirPath = dataDirPath;
@@ -43,6 +44,7 @@ public class FileDataHandler
         }
         return loadedData;
     }
+
     public void Save(GameData data, string profileId)
     {
         //use Path.Combine to account for different OS's having different path seperators
