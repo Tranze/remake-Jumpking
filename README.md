@@ -1,1 +1,6 @@
-Continue development from Vu Minh Phuc's repository: https://github.com/vumphu/JumpKing.
+A remake version of 2D platform game : Jumpking
+This is the test of abilities to become a game developer
+This project using:
++ Unity engine
++ APS.NET
++ C#
